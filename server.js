@@ -5,8 +5,12 @@ import { createApp } from './app.js';
 const server = express();
 
 server.get('/', (req, res) => {
+  // # 案例一：sever.js 返回初始化的视图 + client.js
+  // 将 createSSRApp 执行结果转为模板字符串 - 应用一次模板字符串解析？显示初始化的视图
+  // client 执行 mount 之后，div 中的内容，全部没了；？那还要 server 渲染的 HTML 字符串干嘛？防止页面闪烁？
+
   const app = createApp();
-  renderToString(app).then((html) => {
+  renderToString(app).then(html => {
     console.log('html', html);
 
     res.send(`
@@ -24,13 +28,14 @@ server.get('/', (req, res) => {
         <script type="module" src="/client.js"></script>
       </head>
       <body>
+        <div id="initView">initView: ${html}</div>
         <div id="app">${html}</div>
       </body>
     </html>
     `);
   });
 
-  // ## 也可以仅仅发送一个 HTML 模板，所有逻辑交由 client.js 实现
+  // ## 案例2：也可以仅仅发送一个 HTML 模板，所有逻辑交由 client.js 实现
   // res.send(`
   // <!DOCTYPE html>
   // <html>
@@ -46,7 +51,7 @@ server.get('/', (req, res) => {
   //     <script type="module" src="/client.js"></script>
   //   </head>
   //   <body>
-  //     <div id="app">hello</div>
+  //     <div id="app"></div>
   //   </body>
   // </html>
   // `);

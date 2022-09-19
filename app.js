@@ -1,5 +1,7 @@
+/**
+ * 返回了一个 createSSRApp 执行结果
+ */
 import { createSSRApp } from 'vue';
-
 export function createApp() {
   return createSSRApp({
     data: () => ({ count: 1 }),
